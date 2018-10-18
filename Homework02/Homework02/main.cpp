@@ -55,7 +55,7 @@ QDebug operator<< (QDebug d, const studData &data)
 {    int i,j;
      for(i=0;i<=data.student.size();i++)
      {
-         do.noquote().nospace()<<QString(data.student);
+         d.noquote().nospace()<<QString(data.student);
 
      }
     // 请补全运算符重载函数，使其可以直接输出studData结构
@@ -72,12 +72,14 @@ QDebug operator<< (QDebug d, const studData &data)
 
 
 // 比较类，用于std::sort第三个参数
-class myCmp {
+class myCmp
+{
 public:
+      int currentColumn;
     myCmp(int selectedColumn) { this->currentColumn = selectedColumn; }
     bool operator() (const studData& d1,const studData& d2);
 private:
-    int currentColumn;
+
 };
 
 bool myCmp::operator()(const studData &d1, const studData &d2)
@@ -92,8 +94,8 @@ bool myCmp::operator()(const studData &d1, const studData &d2)
     // ...
     //
 
-    result =(d1.student.at(curretColumn+1)>d2.student.at(curretColumn+1));
-    return result;
+
+    return  d1.student.at(curretColumn+1)>d2.student.at(curretColumn+1);
 
 }
 
@@ -108,12 +110,13 @@ public:
     // 补全该类，实现上述要求
 private:
     QString subjectfile;
-    QList<studentdata>  data;
-    studentdata subject;
+    QList<studData>  data;
+    studData subject;
     void outfile(quint8 column);
+    //return 0;
    //声明
 
-}
+};
 
 // 补全构造函数
 
@@ -127,7 +130,7 @@ private:
 //      }
 ScoreSorter::ScoreSorter(QString dataFile)
 {
-this->sbujectfile=dataFile;
+this->subjectfile=dataFile;
 }
 void ScoreSorter::readfile()
 {
@@ -137,7 +140,7 @@ void ScoreSorter::readfile()
    qDebug()<<"Can't open the file!"<<endl;
 }
 
-QString subject(file.readLine())
+QString subject(file.readLine());
 {
 this->subject.student= subject.split(" ", QString::SkipEmptyParts);
 studDate currentdata;
@@ -149,6 +152,7 @@ while(!file.atEnd())
      this->data.append(currentdata);
 }
     file.close();
+
 }
 
 void ScoreSorter::dosort()
